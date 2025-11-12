@@ -5,6 +5,7 @@ module frog_chip #(
 	parameter N=8
 )(
 	input wire clk,
+	input wire rst_n,
 	
 	input wire enable,
 	input wire load,
@@ -23,7 +24,7 @@ module frog_chip #(
 	
 	assign out = lfsr[0]; // out is LSB
 	
-	always @(*posedge clk) begin
+	always @(posedge clk) begin
 	
 		if (!rst_n) begin
 			lfsr <= {N{1'b0}};
@@ -36,7 +37,7 @@ module frog_chip #(
 		end
 	
 		else if (enable) begin
-			lfsr <= {feedback, lfsr[N-1:1]}
+			lfsr <= {feedback, lfsr[N-1:1]};
 		end
 	
 	end

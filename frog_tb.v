@@ -21,7 +21,7 @@ module frog_chip_tb;
         .seed(seed),
         .enable(enable),
         .out(out)
-    )
+    );
     
     initial begin // Clock gen
         clk = 0;
@@ -33,25 +33,22 @@ module frog_chip_tb;
         rst_n = 0;
         load = 0;
         enable = 0;
-        tap_prog = 0;
-        init_seq = 0;
+        program = 0;
+        seed = 0;
         
         // Release reset
         #(CLK_PERIOD*2);
         rst_n = 1;
         #(CLK_PERIOD);
         
-        tap_prog = 8'b10111000;
-        init_seq = 8'b10101010;
+        program = 8'b10111000;
+        seed = 8'b10101010;
         load = 1;
         #(CLK_PERIOD);
         load = 0;
         enable = 1;
         
-        // Run for 260 cycles (should repeat at 255 for maximal LFSR)
-        repeat(260) begin
-            #(CLK_PERIOD);
-        end
+        #(CLK_PERIOD*260);
     end
 
 endmodule
