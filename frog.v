@@ -6,9 +6,8 @@ module frog_chip #(
 )(
 	input wire clk,
 	input wire rst_n,
-	
-	input wire enable,
 	input wire load,
+	input wire test,
 	
 	input wire program,
 	input wire seed,
@@ -35,8 +34,14 @@ module frog_chip #(
 			taps <= {program, taps[N-1:1]};
 			lfsr <= {seed, lfsr[N-1:1]};
 		end
-	
-		else if (enable) begin
+		
+		else if (test) begin
+			taps <= {N{1'b0}}; // 0 out taps
+			lfsr <= {1'b0, lfsr[N-1:1]}; // shift out
+		end
+		
+		// enable states is when we are not in load, reset, or test
+		else begin
 			lfsr <= {feedback, lfsr[N-1:1]};
 		end
 	

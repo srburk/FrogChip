@@ -12,7 +12,7 @@ module frog_chip_tb;
 	reg load;
     reg program;
     reg seed;
-    reg enable;
+    reg test;
     wire out;
     
     integer i;
@@ -23,7 +23,7 @@ module frog_chip_tb;
         .load(load),
         .program(program),
         .seed(seed),
-        .enable(enable),
+        .test(test),
         .out(out)
     );
     
@@ -36,7 +36,7 @@ module frog_chip_tb;
     	// Initialize
         rst_n = 0;
         load = 0;
-        enable = 0;
+        test = 0;
         program = 0;
         seed = 0;
         
@@ -46,16 +46,24 @@ module frog_chip_tb;
         #(CLK_PERIOD);
         
         load = 1;
-        for (i = 0; i < N; i++) begin
+        for (i = 0; i < N; i = i + 1) begin
 			program = PROGRAM_SEQ[i];
 			seed = SEED_SEQ[i];
 			#(CLK_PERIOD);
 		end
 		
         load = 0;
-        enable = 1;
         
-        #(CLK_PERIOD*260);
+        #(CLK_PERIOD*5);
+        
+        test = 1;
+        
+        #(CLK_PERIOD*N);
+        
+        test = 0;
+        
+        #(CLK_PERIOD*5);
+        
         $finish;
     end
     
