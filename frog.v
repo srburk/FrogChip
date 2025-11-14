@@ -10,8 +10,8 @@ module frog_chip #(
 	input wire enable,
 	input wire load,
 	
-	input wire [N-1:0] program,
-	input wire [N-1:0] seed,
+	input wire program,
+	input wire seed,
 
 	output wire out
 );
@@ -32,8 +32,8 @@ module frog_chip #(
 		end
 	
 		else if (load) begin
-			taps <= program;
-			lfsr <= seed;
+			taps <= {program, taps[N-1:1]};
+			lfsr <= {seed, lfsr[N-1:1]};
 		end
 	
 		else if (enable) begin

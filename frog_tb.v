@@ -4,14 +4,18 @@ module frog_chip_tb;
 
 	parameter N = 8;
 	parameter CLK_PERIOD = 10;
+	parameter [N-1:0] PROGRAM_SEQ = 8'b10111000;
+	parameter [N-1:0] SEED_SEQ = 8'b10101010;
 	
 	reg clk;
 	reg rst_n;
 	reg load;
-    reg [N-1:0] program;
-    reg [N-1:0] seed;
+    reg program;
+    reg seed;
     reg enable;
     wire out;
+    
+    integer i;
     
     frog_chip #(.N(N)) uut (
     	.clk(clk),
@@ -41,14 +45,23 @@ module frog_chip_tb;
         rst_n = 1;
         #(CLK_PERIOD);
         
-        program = 8'b10111000;
-        seed = 8'b10101010;
         load = 1;
-        #(CLK_PERIOD);
+        for (i = 0; i < N; i++) begin
+			program = PROGRAM_SEQ[i];
+			seed = SEED_SEQ[i];
+			#(CLK_PERIOD);
+		end
+		
         load = 0;
         enable = 1;
         
         #(CLK_PERIOD*260);
+        $finish;
     end
+    
+    initial begin
+    	$dumpfile("frog_chip.vcd");
+    	$dumpvars(0, frog_chip_tb);
+	end
 
 endmodule
