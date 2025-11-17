@@ -1,8 +1,7 @@
-
 `timescale 1ns/1ps
 
 module frog_chip #(
-	parameter N=8
+	parameter N=16
 )(
 	input wire clk,
 	input wire rst_n,
@@ -12,7 +11,10 @@ module frog_chip #(
 	input wire program,
 	input wire seed,
 
-	output wire out
+	output wire out,
+
+	output wire [N-1:0] lfsr_test,
+	output wire [N-1:0] taps_test
 );
 
 	reg [N-1:0] lfsr;
@@ -22,6 +24,10 @@ module frog_chip #(
 	assign feedback = ^(lfsr & taps); // XOR all together with tapped flags
 	
 	assign out = lfsr[0]; // out is LSB
+	
+	// test mode parallel read out
+	assign lfsr_test = lfsr;
+	assign taps_test = taps;
 	
 	always @(posedge clk) begin
 	
@@ -48,3 +54,5 @@ module frog_chip #(
 	end
 
 endmodule
+
+

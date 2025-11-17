@@ -2,10 +2,10 @@
 
 module frog_chip_tb;
 
-	parameter N = 8;
+	parameter N = 16;
 	parameter CLK_PERIOD = 10;
-	parameter [N-1:0] PROGRAM_SEQ = 8'b10111000;
-	parameter [N-1:0] SEED_SEQ = 8'b10101010;
+	parameter [N-1:0] PROGRAM_SEQ = 16'b0001000000001011;
+	parameter [N-1:0] SEED_SEQ = 16'b1111111111111111;
 	
 	reg clk;
 	reg rst_n;
@@ -58,7 +58,7 @@ module frog_chip_tb;
         
         test = 1;
         
-        #(CLK_PERIOD*N);
+        #(CLK_PERIOD*(2 ** N));
         
         test = 0;
         
@@ -73,3 +73,4 @@ module frog_chip_tb;
 	end
 
 endmodule
+
